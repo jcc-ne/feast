@@ -4,6 +4,7 @@ from enum import Enum
 from pathlib import Path
 from threading import Lock
 from typing import Any, Callable, List, Optional, Set, Union
+from pydantic import StrictStr
 
 from sqlalchemy import (  # type: ignore
     BigInteger,
@@ -176,6 +177,16 @@ feast_metadata = Table(
     Column("metadata_value", String(50), nullable=False),
     Column("last_updated_timestamp", BigInteger, nullable=False),
 )
+
+
+
+class SqlRegistryConfig(RegistryConfig):
+    registry_type: StrictStr = "sql"
+    """ str: Provider name or a class name that implements Registry."""
+
+    path: StrictStr = ""
+    """ str: Path to metadata store.
+    If registry_type is 'sql', then this is a database URL as expected by SQLAlchemy """
 
 
 class SqlRegistry(BaseRegistry):
